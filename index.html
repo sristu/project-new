@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reddy's Aquarium & Pet Shop | Premium Pets in Vizag</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="navbar glass-card">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="dot">R</span>
+        Reddy's Aquarium &amp; Pet Shop
+      </a>
+      <nav class="nav-links">
+        <a class="active" href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="nav-right">
+        <span class="pill user-pill">Hi, Guest</span>
+        <a class="pill cart-btn" href="cart.html">
+          Cart
+          <span class="badge" id="navCartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="container hero">
+      <div>
+        <span class="hero-badge">Visakhapatnam • Since 2010</span>
+        <h1 class="headline">Premium Aquarium Fish &amp; Pet Supplies in Vizag</h1>
+        <p class="subtext">Healthy fish, vibrant birds, playful small pets and premium accessories curated by experts. Discover luxury pet care with local warmth.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="shop.html">Shop Now</a>
+          <a class="btn btn-ghost" href="contact.html">Contact Owner</a>
+        </div>
+      </div>
+      <div class="hero-media floating-bubbles">
+        <div class="glass-card">
+          <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80" alt="Aquarium" class="float">
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            <span class="pill success">Freshwater</span>
+            <span class="pill">Exotic Birds</span>
+            <span class="pill">Custom Tanks</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="section-head">
+        <h2 class="section-title">Featured Categories</h2>
+        <p class="muted">Handpicked bestsellers loved by Vizag pet parents.</p>
+      </div>
+      <div class="grid" id="categories">
+        <!-- Category cards inserted by JS for consistency -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div class="top">
+      <div class="brand">Reddy's Aquarium &amp; Pet Shop</div>
+      <div>
+        <div class="muted">Quick Links</div>
+        <div class="link-list">
+          <a href="shop.html">Shop</a>
+          <a href="cart.html">Cart</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="muted">Call</div>
+        <a href="tel:8374293417" class="pill" style="margin-top:8px;">+91 83742 93417</a>
+      </div>
+    </div>
+    <div class="footer-note">© 2026 Reddy's Aquarium &amp; Pet Shop. Crafted with care in Visakhapatnam.</div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+    // Populate categories and set nav info
+    const categoryContainer = document.getElementById('categories');
+    if (categoryContainer) {
+      const cats = [
+        { name: 'Aquarium Fish', img: products.find(p => p.category === 'Aquarium Fish')?.image },
+        { name: 'Birds', img: products.find(p => p.category === 'Birds')?.image },
+        { name: 'Small Pets', img: products.find(p => p.category === 'Small Pets')?.image },
+        { name: 'Aquariums', img: products.find(p => p.category === 'Aquariums')?.image },
+        { name: 'Pet Cages', img: products.find(p => p.category === 'Pet Cages')?.image },
+        { name: 'Pet Food', img: products.find(p => p.category === 'Pet Food')?.image },
+        { name: 'Pet Toys', img: products.find(p => p.category === 'Pet Toys')?.image },
+      ];
+      cats.forEach(cat => {
+        const card = document.createElement('div');
+        card.className = 'category-card';
+        card.onclick = () => window.location.href = `shop.html?category=${encodeURIComponent(cat.name)}`;
+        card.innerHTML = `
+          <span class="category-chip">Explore</span>
+          <img src="${cat.img}" alt="${cat.name}">
+          <div class="category-name">${cat.name}</div>
+          <div class="muted">Curated picks & premium care</div>
+        `;
+        categoryContainer.appendChild(card);
+      });
+    }
+
+    // nav user + badge
+    const navName = document.querySelector('.user-pill');
+    const user = JSON.parse(localStorage.getItem('reddys_user') || '{}');
+    if (user.name) navName.textContent = `Hi, ${user.name.split(' ')[0]}`;
+    document.getElementById('navCartCount').textContent = getCartCount();
+  </script>
+</body>
+</html>

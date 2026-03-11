@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Reddy's Aquarium & Pet Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="navbar glass-card">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="dot">R</span>
+        Reddy's Aquarium &amp; Pet Shop
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="nav-right">
+        <span class="pill user-pill">Hi, Guest</span>
+        <a class="pill cart-btn" href="cart.html">
+          Cart
+          <span class="badge" id="navCartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="container split">
+      <div>
+        <span class="hero-badge">Member Access</span>
+        <h1 class="headline">Welcome back, pet parent.</h1>
+        <p class="subtext">Sign in to personalize recommendations, save your cart, and order instantly via WhatsApp.</p>
+        <div class="glass-card">
+          <form id="loginForm">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <button type="submit" class="btn btn-primary">Continue to Shop</button>
+          </form>
+        </div>
+      </div>
+      <div class="glass-card floating-bubbles">
+        <h3 style="margin-top:0;">Why create a quick profile?</h3>
+        <div class="link-list">
+          <span>• Faster checkout & saved cart</span>
+          <span>• Personalized fish & bird picks</span>
+          <span>• Priority WhatsApp support</span>
+        </div>
+        <div style="margin-top:16px;">
+          <a class="btn btn-ghost" href="shop.html">Skip & browse</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.getElementById('navCartCount').textContent = getCartCount();
+    const user = JSON.parse(localStorage.getItem('reddys_user') || '{}');
+    const pill = document.querySelector('.user-pill');
+    if (user.name) pill.textContent = `Hi, ${user.name.split(' ')[0]}`;
+  </script>
+</body>
+</html>

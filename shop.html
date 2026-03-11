@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop | Reddy's Aquarium & Pet Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="navbar glass-card">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="dot">R</span>
+        Reddy's Aquarium &amp; Pet Shop
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a class="active" href="shop.html">Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="nav-right">
+        <span class="pill user-pill">Hi, Guest</span>
+        <a class="pill cart-btn" href="cart.html">
+          Cart
+          <span class="badge" id="navCartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="container">
+      <div class="section-head">
+        <div>
+          <h1 class="section-title">Handpicked Products</h1>
+          <p class="muted">Curated aquatics, birds, habitats and nutrition — crafted for thriving pets.</p>
+        </div>
+        <a class="btn btn-ghost" href="cart.html">View Cart</a>
+      </div>
+
+      <div class="filter-row" id="filters"></div>
+
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+  </main>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+    // user pill and cart badge
+    const user = JSON.parse(localStorage.getItem('reddys_user') || '{}');
+    if (user.name) document.querySelector('.user-pill').textContent = `Hi, ${user.name.split(' ')[0]}`;
+    document.getElementById('navCartCount').textContent = getCartCount();
+
+    const productGrid = document.getElementById('productGrid');
+    const filters = document.getElementById('filters');
+    const categories = [...new Set(products.map(p => p.category))];
+    let active = new URLSearchParams(location.search).get('category') || 'All';
+
+    function renderFilters() {
+      filters.innerHTML = '';
+      ['All', ...categories].forEach(cat => {
+        const chip = document.createElement('button');
+        chip.className = 'chip' + (cat === active ? ' active' : '');
+        chip.textContent = cat;
+        chip.onclick = () => { active = cat; renderFilters(); renderProducts(); };
+        filters.appendChild(chip);
+      });
+    }
+
+    function renderProducts() {
+      productGrid.innerHTML = '';
+      products
+        .filter(p => active === 'All' || p.category === active)
+        .forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <img src="${p.image}" alt="${p.name}">
+            <span class="tag">${p.category}</span>
+            <div class="product-name">${p.name}</div>
+            <div class="price">₹${p.price}</div>
+            <button class="btn btn-primary add-btn">Add to cart</button>
+          `;
+          card.querySelector('.add-btn').onclick = () => {
+            addToCart(p.id);
+            document.getElementById('navCartCount').textContent = getCartCount();
+          };
+          productGrid.appendChild(card);
+        });
+    }
+
+    renderFilters();
+    renderProducts();
+  </script>
+</body>
+</html>

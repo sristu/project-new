@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart | Reddy's Aquarium & Pet Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="navbar glass-card">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="dot">R</span>
+        Reddy's Aquarium &amp; Pet Shop
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a class="active" href="cart.html">Cart</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="nav-right">
+        <span class="pill user-pill">Hi, Guest</span>
+        <a class="pill cart-btn" href="cart.html">
+          Cart
+          <span class="badge" id="navCartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="container">
+      <div class="section-head">
+        <div>
+          <h1 class="section-title">Your Cart</h1>
+          <p class="muted">Review items before placing your WhatsApp order.</p>
+        </div>
+        <a class="btn btn-ghost" href="shop.html">Add more</a>
+      </div>
+
+      <div class="cart-list" id="cartList"></div>
+      <div class="total-row" id="totalRow" style="display:none;">
+        <div>
+          <div class="muted">Total</div>
+          <div class="price" id="totalPrice">₹0</div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn btn-ghost" href="login.html">Update profile</a>
+          <button class="btn btn-accent" id="whatsappBtn">Order via WhatsApp</button>
+        </div>
+      </div>
+      <div id="emptyState" class="glass-card" style="display:none;">
+        <h3>Your cart is empty</h3>
+        <p class="muted">Add some vibrant fish or playful toys to continue.</p>
+        <a class="btn btn-primary" href="shop.html">Explore products</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script>
+    const user = JSON.parse(localStorage.getItem('reddys_user') || '{}');
+    if (user.name) document.querySelector('.user-pill').textContent = `Hi, ${user.name.split(' ')[0]}`;
+    document.getElementById('navCartCount').textContent = getCartCount();
+
+    const cartList = document.getElementById('cartList');
+    const emptyState = document.getElementById('emptyState');
+    const totalRow = document.getElementById('totalRow');
+    const totalPriceEl = document.getElementById('totalPrice');
+
+    function renderCart() {
+      const cart = getCart();
+      cartList.innerHTML = '';
+      if (!cart.length) {
+        emptyState.style.display = 'block';
+        totalRow.style.display = 'none';
+        return;
+      }
+      emptyState.style.display = 'none';
+      totalRow.style.display = 'flex';
+      let total = 0;
+      cart.forEach(item => {
+        const product = products.find(p => p.id === item.id);
+        const lineTotal = product.price * item.qty;
+        total += lineTotal;
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `
+          <img src="${product.image}" alt="${product.name}">
+          <div>
+            <div class="product-name">${product.name}</div>
+            <div class="muted">${product.category}</div>
+            <div class="price">₹${product.price} each</div>
+          </div>
+          <div style="display:grid; gap:8px; justify-items:end;">
+            <div class="qty">
+              <button onclick="updateQty('${item.id}', -1)">-</button>
+              <span>${item.qty}</span>
+              <button onclick="updateQty('${item.id}', 1)">+</button>
+            </div>
+            <div class="muted">₹${lineTotal}</div>
+            <button class="btn btn-ghost" onclick="removeItem('${item.id}')">Remove</button>
+          </div>
+        `;
+        cartList.appendChild(row);
+      });
+      totalPriceEl.textContent = `₹${total}`;
+      document.getElementById('navCartCount').textContent = getCartCount();
+    }
+
+    window.updateQty = (id, delta) => {
+      changeQuantity(id, delta);
+      renderCart();
+    };
+
+    window.removeItem = (id) => {
+      removeFromCart(id);
+      renderCart();
+    };
+
+    document.getElementById('whatsappBtn').onclick = () => sendWhatsAppOrder(user, products);
+
+    renderCart();
+  </script>
+</body>
+</html>

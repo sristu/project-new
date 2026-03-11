@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Reddy's Aquarium & Pet Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="navbar glass-card">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="dot">R</span>
+        Reddy's Aquarium &amp; Pet Shop
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="about.html">About</a>
+        <a class="active" href="contact.html">Contact</a>
+      </nav>
+      <div class="nav-right">
+        <span class="pill user-pill">Hi, Guest</span>
+        <a class="pill cart-btn" href="cart.html">
+          Cart
+          <span class="badge" id="navCartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="container split">
+      <div class="glass-card contact-card">
+        <span class="hero-badge">Talk to Reddy</span>
+        <h1 class="headline">Visit, call, or WhatsApp us today.</h1>
+        <div class="muted">Reddy's Aquarium &amp; Pet Shop<br>Visakhapatnam, Andhra Pradesh, India</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn btn-primary" href="tel:8374293417">Call Owner</a>
+          <a class="btn btn-ghost" href="https://wa.me/918374293417" target="_blank">WhatsApp Chat</a>
+        </div>
+        <div class="pill">Phone: +91 83742 93417</div>
+        <div class="pill">WhatsApp Orders: +91 83742 93417</div>
+      </div>
+      <div class="glass-card">
+        <h3 style="margin-top:0;">Quick message</h3>
+        <form onsubmit="event.preventDefault(); alert('Thanks! We will call you back.');">
+          <input type="text" placeholder="Your Name" required>
+          <input type="tel" placeholder="Phone Number" required>
+          <textarea rows="3" placeholder="Tell us what you need"></textarea>
+          <button class="btn btn-primary" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/cart.js"></script>
+  <script>
+    const user = JSON.parse(localStorage.getItem('reddys_user') || '{}');
+    if (user.name) document.querySelector('.user-pill').textContent = `Hi, ${user.name.split(' ')[0]}`;
+    document.getElementById('navCartCount').textContent = getCartCount();
+  </script>
+</body>
+</html>
